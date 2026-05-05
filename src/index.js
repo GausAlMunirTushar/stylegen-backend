@@ -1,8 +1,19 @@
 import express from "express";
+import dotenv from "dotenv";
+import connectDatabase from "./configs/database.js";
+import { getAllUsers, register } from "./controllers/auth.controller.js";
 
+dotenv.config();
 const app = express();
-const PORT = 4000;
+const port = process.env.PORT;
 
-app.listen(PORT, () => {
-  console.log("Server is running on port 4000");
+app.use(express.json());
+
+app.post("/register", register);
+app.get("/users", getAllUsers);
+
+connectDatabase();
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
