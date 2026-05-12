@@ -30,13 +30,35 @@ const register = async (req, res) => {
   }
 };
 
-const getAllUsers = async (req, res) => {
-  const users = await User.find({}, { password: 0 });
-  res.json({
-    success: true,
-    message: "Users fetched successfully",
-    users,
-  });
+// Login functionality
+
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    if (user.password !== password) {
+      return res.json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
+    res.json({
+      success: true,
+      message: "Login successful",
+      user,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
-export { register, getAllUsers };
+export { register, login };

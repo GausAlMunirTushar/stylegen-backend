@@ -1,7 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDatabase from "./configs/database.js";
-import { getAllUsers, register } from "./controllers/auth.controller.js";
+import userRoutes from "./routes/user.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import categoryRouter from "./routes/category.routes.js";
 
 dotenv.config();
 const app = express();
@@ -9,8 +11,9 @@ const port = process.env.PORT;
 
 app.use(express.json());
 
-app.post("/register", register);
-app.get("/users", getAllUsers);
+app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
+app.use("/categories", categoryRouter );
 
 connectDatabase();
 
